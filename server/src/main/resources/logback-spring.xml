@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+  <property name="LOG_ROOT" value="${user.home}/.playground/logs/"/>
+  <property name="LOG_FILE_NAME" value="xlswriter"/>
+
+  <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_ROOT}/${LOG_FILE_NAME}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_ROOT}/${LOG_FILE_NAME}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+      <maxFileSize>10MB</maxFileSize>
+      <maxHistory>10</maxHistory>
+      <totalSizeCap>1GB</totalSizeCap>
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} | %t | %-5level | %logger | %msg | %X{userName} |%n</pattern>
+    </encoder>
+  </appender>
+
+
+  <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} | %t | %-5level | %logger | %msg | %X{userName} |%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="de.foo" level="INFO" additivity="false">
+    <appender-ref ref="Console"/>
+    <appender-ref ref="File"/>
+  </logger>
+  <logger name="com.foo" level="INFO" additivity="false">
+    <appender-ref ref="Console"/>
+    <appender-ref ref="File"/>
+  </logger>
+  <logger name="org.jxls" level="WARN" additivity="false">
+    <appender-ref ref="Console"/>
+    <appender-ref ref="File"/>
+  </logger>
+
+  <root level="WARN" additivity="false">
+    <appender-ref ref="Console"/>
+    <appender-ref ref="File"/>
+  </root>
+</configuration>
