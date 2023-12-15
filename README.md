@@ -1,6 +1,12 @@
-# JXLS + Spring Boot: Trial to reproduce NullPointerException on ExpressionEvaluatorFactoryHolder
+# JXLS + Spring Boot: Trial to reproduce NullPointerException on ExpressionEvaluatorFactoryHolder in simple demo project
 
 for https://github.com/jxlsteam/jxls/discussions/276
+
+## Context
+
+Issue occurs in real project when we package our app with spring-boot-maven-plugin. 
+All is well if application class is started directly in IntelliJ. 
+However if we start the packaged app from command line we get the error.
 
 ```
 Caused by: java.lang.reflect.InvocationTargetException: null
@@ -21,6 +27,9 @@ Caused by: java.lang.NullPointerException: Cannot invoke "org.jxls.expression.Ex
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 	... 19 common frames omitted
 ```
+
+Therefore we try to reproduce in a simple demo project here.
+
 
 ## Current status
 
