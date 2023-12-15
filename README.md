@@ -6,7 +6,7 @@ for https://github.com/jxlsteam/jxls/discussions/276
 
 Issue occurs in real project when we package our app with spring-boot-maven-plugin. 
 All is well if application class is started directly in IntelliJ. 
-However if we start the packaged app from command line we get the error.
+However, if we start the packaged app from command line we get the error.
 
 ```
 Caused by: java.lang.reflect.InvocationTargetException: null
@@ -28,7 +28,11 @@ Caused by: java.lang.NullPointerException: Cannot invoke "org.jxls.expression.Ex
 	... 19 common frames omitted
 ```
 
-Therefore we try to reproduce in a simple demo project here.
+Our current workaround in the real project is to package via maven-assembly-plugin instead.
+How this can be achieved is shown in the maven profile `build-server-jar--via-maven-assembly-plugin` in this demo.
+
+However, we would like to understand why the error occurs. 
+Therefore, we try to reproduce the situation in this simple demo project here.
 
 
 ## Current status
