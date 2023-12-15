@@ -1,6 +1,8 @@
 Trial to reproduce `java.lang.NullPointerException: Cannot invoke "org.jxls.expression.ExpressionEvaluatorFactory.createExpressionEvaluator(String)" because the return value of "org.jxls.util.JxlsHelper$ExpressionEvaluatorFactoryHolder.access$100()" is null`
 for https://github.com/jxlsteam/jxls/discussions/276
 
+Current status: Not reproducible
+
 
 ## Requirements
 
