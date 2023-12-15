@@ -20,14 +20,22 @@ public class MyWriter {
 
     private static final Logger LOG = LoggerFactory.getLogger(MyWriter.class);
 
+    private static final String EXCEL_FILE_ENDING = "xlsx";
+
+    private static final String TEMPLATE_FILENAME = "template";
+    private static final String OUTPUT_FILENAME = "test";
+
+    private static final String SHEET_NAME = "Data";
+
 
     public String process(List<Person> persons) {
 
-        String tmpdir = System.getProperty("java.io.tmpdir");
-        final String template = "template.xlsm";
-        final String targetFilePath = Paths.get(tmpdir, "test.xlsm").toAbsolutePath().toString();
+        final String tmpdir = System.getProperty("java.io.tmpdir");
 
-        LOG.info("Creating {} using template {}", targetFilePath, template);
+        final String template = TEMPLATE_FILENAME + "." + EXCEL_FILE_ENDING;
+        final String targetFilePath = Paths.get(tmpdir, OUTPUT_FILENAME + "." + EXCEL_FILE_ENDING).toAbsolutePath().toString();
+
+        LOG.info("Creating {} using " + TEMPLATE_FILENAME + " {}", targetFilePath, template);
 
         try (final InputStream is = MyWriter.class.getResourceAsStream(template)) {
 
@@ -41,12 +49,15 @@ public class MyWriter {
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 final Transformer transformer = TransformerFactory.createTransformer(is, os);
 
+
+
+
                 final Area xlsArea = buildArea(transformer);
 
                 final Context context = new Context();
                 context.putVar("persons", persons);
 
-                xlsArea.applyAt(new CellRef("Data!A1"), context);
+                xlsArea.applyAt(new CellRef(SHEET_NAME + "!A1"), context);
 
                 transformer.write();
 
