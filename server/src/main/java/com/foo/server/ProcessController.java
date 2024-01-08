@@ -22,6 +22,13 @@ public class ProcessController {
         this.processorService = processorService;
     }
 
+    @GetMapping("/hello-async")
+    public ResponseEntity<String> helloAsync() {
+        final List<Person> persons = getPeople();
+        processorService.processAsync(persons);
+        return ResponseEntity.ok("will finish in background");
+    }
+
     @GetMapping("/hello")
     public ResponseEntity<Result> hello() {
 
