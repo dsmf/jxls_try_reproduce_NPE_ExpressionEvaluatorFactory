@@ -11,7 +11,10 @@ import org.jxls.util.TransformerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -33,7 +36,7 @@ public class MyWriter {
         final String tmpdir = System.getProperty("java.io.tmpdir");
 
         final String template = TEMPLATE_FILENAME + "." + EXCEL_FILE_ENDING;
-        final String targetFilePath = Paths.get(tmpdir, OUTPUT_FILENAME + "." + EXCEL_FILE_ENDING).toAbsolutePath().toString();
+        final String targetFilePath = Paths.get(tmpdir, OUTPUT_FILENAME + System.currentTimeMillis() + "." + EXCEL_FILE_ENDING).toAbsolutePath().toString();
 
         LOG.info("Creating {} using " + TEMPLATE_FILENAME + " {}", targetFilePath, template);
 
@@ -44,12 +47,10 @@ public class MyWriter {
 
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 // In our real project the error occurs in the following line
-                // hen creating the transformer.
+                // when creating the transformer.
                 // However, in this demo I cannot reproduce this behaviour yet.
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 final Transformer transformer = TransformerFactory.createTransformer(is, os);
-
-
 
 
                 final Area xlsArea = buildArea(transformer);
