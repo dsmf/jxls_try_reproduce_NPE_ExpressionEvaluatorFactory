@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @RestController
@@ -26,15 +25,20 @@ public class ProcessController {
     @GetMapping("/hello")
     public ResponseEntity<Result> hello() {
 
-        final Faker faker = new Faker();
+        final List<Person> persons = getPeople();
+
+        final String targetFilePath = processorService.process(persons);
+        return ResponseEntity.ok(new Result(targetFilePath, persons));
+    }
+
+
+    private static List<Person> getPeople() {
         final List<Person> persons = IntStream.range(0, 100)
-                .mapToObj(i -> new Person(faker.name().name()))
-                .collect(Collectors.toList());
+                .mapToObj(i -> new Person(new Faker().name().name()))
+                .toList();
 
         LOG.debug("Generated names {}", persons);
-
-        String targetFilePath = processorService.process(persons);
-        return ResponseEntity.ok(new Result(targetFilePath, persons));
+        return persons;
     }
 
     public record Result(String excelFilePath, List<Person> persons) {
