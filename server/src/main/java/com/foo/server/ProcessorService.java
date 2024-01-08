@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ProcessorService {
@@ -15,6 +16,16 @@ public class ProcessorService {
     private static final Logger LOG = LoggerFactory.getLogger(ProcessorService.class);
 
     public ProcessorService() {
+    }
+
+    public CompletableFuture<String> processSupplyAsync(List<Person> persons) {
+        return CompletableFuture.supplyAsync(() -> {
+            LOG.debug("processSupplyAsync -- start");
+            final String result = process(persons);
+            LOG.info("result: {}", result);
+            LOG.debug("processSupplyAsync -- end");
+            return result;
+        });
     }
 
     @Async

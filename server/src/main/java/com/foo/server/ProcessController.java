@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 
 @RestController
@@ -20,6 +21,20 @@ public class ProcessController {
 
     public ProcessController(final ProcessorService processorService) {
         this.processorService = processorService;
+    }
+
+    @GetMapping("/hello2")
+    public String helloAsyncInService() {
+        final List<Person> persons = getPeople();
+        try {
+            // with this construct I get the NullPointerException: Cannot invoke "org.jxls.expression.ExpressionEvaluatorFactory.createExpressionEvaluator(String)"
+            // in the completable future
+            return processorService.processSupplyAsync(persons).get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/hello-async")
