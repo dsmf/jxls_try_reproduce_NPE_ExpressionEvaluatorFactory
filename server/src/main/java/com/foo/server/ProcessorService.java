@@ -2,6 +2,7 @@ package com.foo.server;
 
 import de.foo.writer.MyWriter;
 import de.foo.writer.api.Person;
+import org.jxls.util.TransformerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -19,14 +20,39 @@ public class ProcessorService {
     }
 
     public CompletableFuture<String> processSupplyAsync(List<Person> persons) {
+
         return CompletableFuture.supplyAsync(() -> {
-            LOG.debug("processSupplyAsync -- start");
-            final String result = process(persons);
-            LOG.info("result: {}", result);
-            LOG.debug("processSupplyAsync -- end");
-            return result;
+
+                LOG.debug("processSupplyAsync -- start");
+                final String result = process(persons);
+                LOG.info("result: {}", result);
+                LOG.debug("processSupplyAsync -- end");
+
+                return result;
         });
     }
+
+    public CompletableFuture<String> processSupplyAsyncWithOtherClassloader(List<Person> persons) {
+        return CompletableFuture.supplyAsync(() -> {
+
+            final ClassLoader originalThreadClassloader = Thread.currentThread().getContextClassLoader();
+            Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+            try {
+
+                LOG.debug("processSupplyAsync -- start");
+                final String result = process(persons);
+                LOG.info("result: {}", result);
+                LOG.debug("processSupplyAsync -- end");
+
+                return result;
+
+            } finally {
+                Thread.currentThread().setContextClassLoader(originalThreadClassloader);
+            }
+
+        });
+    }
+
 
     @Async
     public void processAsync(List<Person> persons) {

@@ -2,6 +2,8 @@ package com.foo.server;
 
 import com.github.javafaker.Faker;
 import de.foo.writer.api.Person;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +33,24 @@ public class ProcessController {
             // in the completable future
             return processorService.processSupplyAsync(persons).get();
         } catch (InterruptedException e) {
+            LOG.error("Interrupted!", e);
+            Thread.currentThread().interrupt();
+            return e.getMessage();
+        } catch (ExecutionException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/hello2-other-classloader")
+    public String helloAsyncInServiceFixed() {
+        final List<Person> persons = getPeople();
+        try {
+            // Workaround via setting classloader https://github.com/jxlsteam/jxls/discussions/276#discussioncomment-8073204
+            return processorService.processSupplyAsyncWithOtherClassloader(persons).get();
+        } catch (InterruptedException e) {
+            LOG.error("Interrupted!", e);
+            Thread.currentThread().interrupt();
+            return e.getMessage();
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }

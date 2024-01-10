@@ -44,14 +44,7 @@ public class MyWriter {
 
             try (final OutputStream os = new FileOutputStream(targetFilePath)) {
 
-
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                // In our real project the error occurs in the following line
-                // when creating the transformer.
-                // However, in this demo I cannot reproduce this behaviour yet.
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 final Transformer transformer = TransformerFactory.createTransformer(is, os);
-
 
                 final Area xlsArea = buildArea(transformer);
 
